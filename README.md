@@ -1,0 +1,51 @@
+# Robin Interview - Document Storage System
+
+This project demonstrates a multi-tenant document management system.
+
+## Architecture
+
+- **document-api**: FastAPI service handling document uploads with client-based routing. Stores documents via the `data-store`
+- **nginx**: Reverse proxy for the document-api service
+- **data-store**: FastAPI service managing document metadata in PostgreSQL with client isolation
+- **postgres**: Database with client-based document isolation
+- **otel-collector**: OpenTelemetry collector for distributed tracing (stdout output)
+
+## API Endpoints
+
+### Document API (via nginx on port 80)
+
+- `PUT /clients/{client_id}/upload-document` - Upload document for specific client
+- `GET /clients/{client_id}/documents/{document_id}` - Retrieve document metadata
+- `GET /health` - Health check
+
+### Data Store API (internal port 8001)
+
+- `POST /clients/{client_id}/documents` - Store document metadata
+- `GET /clients/{client_id}/documents/{document_id}` - Get document metadata
+- `GET /health` - Health check
+
+## Running the Project
+
+```bash
+# run all services
+./setup.sh
+```
+
+## Testing
+
+Use the included test script to verify the API:
+
+```bash
+make test
+```
+
+## Development
+
+Each service uses Python 3.13 with Poetry for dependency management.
+
+## Services
+
+- **nginx**: `http://localhost:80` (main API access)
+- **document-api**: `http://localhost:8000` (direct access)
+- **data-store**: `http://localhost:8001` (internal service)
+- **postgres**: `localhost:5432`
