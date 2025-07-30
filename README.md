@@ -4,11 +4,13 @@ This project demonstrates a multi-tenant document management system.
 
 ## Architecture
 
-- **document-api**: FastAPI service handling document uploads with client-based routing. Stores documents via the `data-store`
 - **nginx**: Reverse proxy for the document-api service
+- **document-api**: FastAPI service handling document uploads with client-based routing. Stores documents via the `data-store`
 - **data-store**: FastAPI service managing document metadata in PostgreSQL with client isolation
 - **postgres**: Database with client-based document isolation
 - **otel-collector**: OpenTelemetry collector for distributed tracing (stdout output)
+
+![Sequence Diagram](./system-sequence.png)
 
 ## API Endpoints
 
