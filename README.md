@@ -2,6 +2,25 @@
 
 This project demonstrates a multi-tenant document management system.
 
+## Instructions
+
+Add observability to this project in a way that requests and service health can be monitored.
+Consider how you could aid engineers troubleshooting issues with the stack.
+
+We are not looking for an exhaustive implementation for every facet of the project; we would
+rather you show us a few targeted examples of observability features and patterns you would
+implement in a real project of this structure.
+
+The OTEL collector is included to receive data from the applications and represents a full
+observability platform (such as DataDog) - we don't require any further UI tools here.
+
+Show your workings via git commits. Don't spend more than 90 minutes on this.
+
+Feel free to use AI assistants to help you complete this task.
+
+Send your finished solution back to us, we will review it.
+If we decide to proceed, we’ll use this solution as the context for follow up technical questions.
+
 ## Architecture
 
 - **nginx**: Reverse proxy for the document-api service
