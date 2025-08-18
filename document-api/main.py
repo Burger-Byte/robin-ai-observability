@@ -1,15 +1,16 @@
 import asyncio
 import logging
-import os
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 import httpx
 import magic
 from config import get_settings
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
+
+from telemetry import init_observability
+
 
 app = FastAPI(title="Document API", version="1.0.0")
 
@@ -140,6 +141,8 @@ async def retrieve_document_metadata(
             status_code=500, detail="Failed to retrieve document metadata"
         )
 
+
+init_observability()
 
 if __name__ == "__main__":
     import uvicorn

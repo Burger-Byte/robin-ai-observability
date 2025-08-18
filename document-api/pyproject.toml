@@ -13,6 +13,9 @@ httpx = "*"
 pydantic = "*"
 pydantic-settings = "*"
 python-magic = "*"
+opentelemetry-api = "^1.36.0"
+opentelemetry-sdk = "^1.36.0"
+opentelemetry-exporter-otlp = "^1.36.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"

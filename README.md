@@ -26,6 +26,13 @@ This project demonstrates a multi-tenant document management system.
 - `GET /clients/{client_id}/documents/{document_id}` - Get document metadata
 - `GET /health` - Health check
 
+## OpenTelemtry Integration
+
+The `document-api` project contains the client side setup required for a python application
+to connect to the OpenTelemetry collector running via compose, see `document-api/telemetry.py`.
+
+No observability points are current sent using these configured exporters.
+
 ## Running the Project
 
 ```bash
@@ -35,7 +42,7 @@ This project demonstrates a multi-tenant document management system.
 
 ## Testing
 
-Use the included test script to verify the API:
+Use the included test script to verify the API after running `setup-and-run.sh`:
 
 ```bash
 make test
@@ -45,14 +52,7 @@ make test
 
 Each service uses Python 3.13 with Poetry for dependency management.
 
-## Services
-
-- **nginx**: `http://localhost:80` (main API access)
-- **document-api**: `http://localhost:8000` (direct access)
-- **data-store**: `http://localhost:8001` (internal service)
-- **postgres**: `localhost:5432`
-
-## Package Management
+### Package Management
 
 The python applications use poetry to manage dependencies. If you do not wish to install poetry
 on your machine, you can interact with it via the services defined in the compose file.
@@ -62,3 +62,10 @@ For example, installing a dependency into the `document-api` project:
 ```bash
 docker-compose run --rm document-api poetry add opentelemetry-api
 ```
+
+## Services
+
+- **nginx**: `http://localhost:80` (main API access)
+- **document-api**: `http://localhost:8000` (direct access)
+- **data-store**: `http://localhost:8001` (internal service)
+- **postgres**: `localhost:5432`
