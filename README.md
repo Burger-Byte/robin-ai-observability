@@ -30,7 +30,7 @@ This project demonstrates a multi-tenant document management system.
 
 ```bash
 # run all services
-./setup.sh
+./setup-and-run.sh
 ```
 
 ## Testing
@@ -51,3 +51,14 @@ Each service uses Python 3.13 with Poetry for dependency management.
 - **document-api**: `http://localhost:8000` (direct access)
 - **data-store**: `http://localhost:8001` (internal service)
 - **postgres**: `localhost:5432`
+
+## Package Management
+
+The python applications use poetry to manage dependencies. If you do not wish to install poetry
+on your machine, you can interact with it via the services defined in the compose file.
+
+For example, installing a dependency into the `document-api` project:
+
+```bash
+docker-compose run --rm document-api poetry add opentelemetry-api
+```
