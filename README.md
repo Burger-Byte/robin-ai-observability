@@ -16,7 +16,9 @@ observability platform (such as DataDog) - we don't require any further UI tools
 
 Show your workings via git commits. Don't spend more than 90 minutes on this.
 
-Feel free to use AI assistants to help you complete this task.
+Feel free to use AI assistants to help you complete this task, but avoid bashing the whole
+task instructions into an LLM :). We want to understand what your thoughts and approaches are to
+adding observability to an existing system.
 
 Send your finished solution back to us, we will review it.
 If we decide to proceed, we’ll use this solution as the context for follow up technical questions.
@@ -50,7 +52,7 @@ If we decide to proceed, we’ll use this solution as the context for follow up 
 The `document-api` project contains the client side setup required for a python application
 to connect to the OpenTelemetry collector running via compose, see `document-api/telemetry.py`.
 
-No observability points are current sent using these configured exporters.
+No observability points are currently sent using these configured exporters.
 
 ## Running the Project
 
