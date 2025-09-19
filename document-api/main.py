@@ -1,4 +1,3 @@
-import asyncio
 import logging
 from datetime import datetime
 from pathlib import Path
@@ -9,8 +8,7 @@ from config import get_settings
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
 
-from telemetry import init_observability
-
+from telemetry import increment_counter, init_observability, record_histogram_value
 
 app = FastAPI(title="Document API", version="1.0.0")
 
@@ -20,19 +18,13 @@ logger = logging.getLogger(__name__)
 UPLOADS_DIR = Path("/app/uploads")
 UPLOADS_DIR.mkdir(exist_ok=True)
 
+init_observability()
 
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
+    increment_counter("health_check_requests", 1)
     return {"status": "healthy", "service": "document-api"}
-
-
-async def summarise_document_using_llm(file_path):
-    """Summarise the document using a large language model."""
-
-    # Call to real LLM API would go here - lets simulate with a sleep to fake the expensive LLM call
-    await asyncio.sleep(10)
-    return "This is a summary of the document."
 
 
 @app.put("/clients/{client_id}/upload-document")
@@ -61,7 +53,6 @@ async def upload_document(
             "file_type": file_type,
             "content_type": file.content_type,
             "file_path": str(file_path),
-            "summary": await summarise_document_using_llm(file_path),
         }
 
         async with httpx.AsyncClient() as client:
@@ -141,8 +132,6 @@ async def retrieve_document_metadata(
             status_code=500, detail="Failed to retrieve document metadata"
         )
 
-
-init_observability()
 
 if __name__ == "__main__":
     import uvicorn
