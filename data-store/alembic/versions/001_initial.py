@@ -32,6 +32,7 @@ def upgrade() -> None:
             nullable=True,
         ),
         sa.Column("file_path", sa.String(), nullable=True),
+        sa.Column("summary", sa.String(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(

@@ -18,3 +18,4 @@ class DocumentMetadata(Base):
     content_type = Column(String, nullable=True)
     upload_timestamp = Column(DateTime(timezone=True), server_default=func.now())
     file_path = Column(String, nullable=True)  # Optional: where file is stored
+    summary = Column(String, nullable=False)

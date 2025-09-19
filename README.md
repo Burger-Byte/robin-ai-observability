@@ -35,8 +35,8 @@ If we decide to proceed, we’ll use this solution as the context for follow up 
 
 Tips:
 
-- As a first step you may want to run the full stack and run the tests - this will show you how the otel
-collector logs out the received metrics.
+- As a first step you may want to run the full stack, run the tests & review the compose logs - this
+  will show you how the otel collector logs out the received metrics.
 - The python applications are ran using uvicorn with the --reload flag, so any changes you make to the
   the python code will be reloaded and available instantly.
 - This project requires docker to run the stack and tests

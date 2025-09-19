@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from datetime import datetime
 from pathlib import Path
@@ -27,6 +28,14 @@ async def health_check():
     return {"status": "healthy", "service": "document-api"}
 
 
+async def summarise_document_using_llm(file_path):
+    """Summarise the document using a large language model."""
+
+    # Call to real LLM API would go here - lets simulate with a sleep to fake the expensive LLM call
+    await asyncio.sleep(10)
+    return "This is a summary of the document."
+
+
 @app.put("/clients/{client_id}/upload-document")
 async def upload_document(
     client_id: str, file: UploadFile = File(...), settings=Depends(get_settings)
@@ -53,6 +62,7 @@ async def upload_document(
             "file_type": file_type,
             "content_type": file.content_type,
             "file_path": str(file_path),
+            "summary": await summarise_document_using_llm(file_path),
         }
 
         async with httpx.AsyncClient() as client:
