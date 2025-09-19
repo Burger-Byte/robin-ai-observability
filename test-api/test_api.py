@@ -8,7 +8,7 @@ from pathlib import Path
 
 import requests
 
-BASE_URL = "http://localhost"
+BASE_URL = os.getenv("BASE_URL", "http://localhost")
 TEST_CLIENT_ID = "test-client-123"
 
 
@@ -29,7 +29,9 @@ def test_health_endpoints():
         response = requests.get(f"{BASE_URL}/health", timeout=10)
         print(f"Document API health: {response.status_code} - {response.json()}")
 
-        response = requests.get("http://localhost:8001/health", timeout=10)
+        # In containerized environment, access data-store directly
+        data_store_url = os.getenv("DATA_STORE_URL", "http://data-store:8000")
+        response = requests.get(f"{data_store_url}/health", timeout=10)
         print(f"Data Store health: {response.status_code} - {response.json()}")
 
     except requests.RequestException as e:

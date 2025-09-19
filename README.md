@@ -39,7 +39,7 @@ Tips:
 collector logs out the received metrics.
 - The python applications are ran using uvicorn with the --reload flag, so any changes you make to the
   the python code will be reloaded and available instantly.
-- This project requires docker to run the stack and python3 on your path to run the tests.
+- This project requires docker to run the stack and tests
 
 ## Architecture
 
@@ -60,7 +60,7 @@ collector logs out the received metrics.
 
 ## Testing
 
-Use the included test script to verify the API after running `setup-and-run.sh`:
+Use the included test project to verify the API after running `setup-and-run.sh`:
 
 ```bash
 make test

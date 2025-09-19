@@ -31,5 +31,4 @@ clean: ## Stop services and remove volumes
 	docker system prune -f
 
 test: ## Run the API test script
-	python3 -m venv venv
-	. venv/bin/activate && pip install requests && python3 test_api.py
+	docker compose --profile test run --rm test-api

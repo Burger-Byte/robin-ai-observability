@@ -77,5 +77,22 @@ services:
       - "4317:4317"   # OTLP gRPC receiver
       - "4318:4318"   # OTLP HTTP receiver
 
+  test-api:
+    build: ./test-api
+    depends_on:
+      nginx:
+        condition: service_started
+      document-api:
+        condition: service_healthy
+      data-store:
+        condition: service_healthy
+    environment:
+      - BASE_URL=http://nginx
+      - DATA_STORE_URL=http://data-store:8000
+    volumes:
+      - ./test-api:/app
+    profiles:
+      - test
+
 volumes:
   postgres_data:
