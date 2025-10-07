@@ -31,9 +31,27 @@ async def health_check():
 async def summarise_document_using_llm(file_path):
     """Summarise the document using a large language model."""
 
-    # Call to real LLM API would go here - lets simulate with a sleep to fake the expensive LLM call
-    await asyncio.sleep(10)
-    return "This is a summary of the document."
+    from telemetry import trace_operation
+    import time
+    
+    with trace_operation(
+        "llm.summarize_document",
+        attributes={
+            "document.path": str(file_path),
+            "llm.model": "gpt-4-turbo"
+        }
+    ) as span:
+        start_time = time.time()
+        
+        await asyncio.sleep(10)
+        
+        duration = time.time() - start_time
+        span.set_attribute("llm.duration_seconds", duration)
+        
+        from telemetry import record_histogram_value
+        record_histogram_value("llm_duration_seconds", duration)
+        
+        return "This is a summary of the document."
 
 
 @app.put("/clients/{client_id}/upload-document")
@@ -84,6 +102,17 @@ async def upload_document(
             f"Successfully uploaded document: {file.filename} for client: {client_id}"
         )
 
+        increment_counter(
+            "document_uploads_total",
+            1,
+            tags={"client_id": client_id, "status": "success"}
+        )
+        record_histogram_value(
+            "document_upload_size_bytes",
+            file_size,
+            tags={"client_id": client_id}
+        )
+
         return JSONResponse(
             status_code=200,
             content={
@@ -95,9 +124,19 @@ async def upload_document(
         )
 
     except httpx.RequestError as e:
+        increment_counter(
+            "document_uploads_total",
+            1,
+            tags={"client_id": client_id, "status": "error"}
+        )
         logger.error(f"Error communicating with data-store: {str(e)}")
         raise HTTPException(status_code=503, detail="Data store service unavailable")
     except Exception as e:
+        increment_counter(
+            "document_uploads_total",
+            1,
+            tags={"client_id": client_id, "status": "error"}
+        )
         logger.error(f"Error uploading document: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to upload document")
     finally:
