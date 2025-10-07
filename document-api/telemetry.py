@@ -14,6 +14,8 @@ from opentelemetry.sdk.metrics.export import (
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 
+from contextlib import contextmanager
+
 
 def init_observability():
     """Initialize OpenTelemetry observability.
@@ -55,3 +57,18 @@ def record_histogram_value(
     meter = metrics.get_meter_provider().get_meter("general")
     histogram = meter.create_histogram(name=histogram_name)
     histogram.record(value, tags)
+
+@contextmanager
+def trace_operation(operation_name: str, attributes: dict = None):
+    """Context manager for tracing operations."""
+    tracer = trace.get_tracer("document-api")
+    with tracer.start_as_current_span(operation_name) as span:
+        if attributes:
+            for key, value in attributes.items():
+                span.set_attribute(key, value)
+        try:
+            yield span
+        except Exception as e:
+            span.set_status(trace.Status(trace.StatusCode.ERROR, str(e)))
+            span.record_exception(e)
+            raise
